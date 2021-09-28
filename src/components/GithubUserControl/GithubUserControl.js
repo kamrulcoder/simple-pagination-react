@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Users from '../Users/Users';
 import Pagination from '../Pagination/Pagination';
-import SearchUser from '../SearchUser.js/SearchUser';
 
-const MainComponent = () => {
+const GithubUserControl = () => {
 
     // get github user states 
     const [posts, setPosts] = useState([]);
@@ -14,7 +13,6 @@ const MainComponent = () => {
 
     // search data states
     const [searchUsers, setSearchUsers] = useState([]);
-
 
     useEffect(() => {
         const fetchUse = async () => {
@@ -42,7 +40,7 @@ const MainComponent = () => {
     return (
         <div className="cuserArea  py-5">
             <div className="container">
-                <SearchUser />
+                
                 <Users currentUser={currentPosts} loading={loading}></Users>
                 <Pagination postPerpage={postsPerPage} totalUser={posts.length} paginate={paginate} />
             </div>
@@ -50,4 +48,4 @@ const MainComponent = () => {
     );
 };
 
-export default MainComponent;
+export default GithubUserControl;

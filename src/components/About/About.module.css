@@ -1,0 +1,13 @@
+.aboutPage {
+    height: 30vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ddd;
+    text-align: center;
+}
+
+.aboutPage  h2 {
+    font-weight: bold;
+    text-transform: uppercase;
+}

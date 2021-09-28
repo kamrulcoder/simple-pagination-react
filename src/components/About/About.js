@@ -1,10 +1,15 @@
 import React from 'react';
+import classes from  './About.module.css'
 
 const About = () => {
     return (
-        <div>
-            <h3>About Page </h3>
-        </div>
+<div className={classes.aboutPage}>
+    <div className="container">
+       <div className="flex justifiy-content-center align-items-center">
+       <h2>About Page </h2>
+       </div>
+    </div>
+</div>
     );
 };
 

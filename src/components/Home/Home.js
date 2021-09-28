@@ -1,10 +1,10 @@
 import React from 'react';
-import User from '../MainComponent/MainComponent';
+import GithubUserControl from '../GithubUserControl/GithubUserControl';
 
 const Home = () => {
     return (
         <div className="user">
-            <User/>
+            <GithubUserControl></GithubUserControl>
         </div>
     );
 };
