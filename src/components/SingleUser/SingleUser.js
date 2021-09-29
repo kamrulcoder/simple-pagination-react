@@ -5,9 +5,6 @@ const SingleUser = ({user}) => {
   const { avatar_url,login,type
 } = user;
 
-
-
-
     return (
         <div className="col-xl-3 col-sm-6 ">
         <div className="mb-5 shadow-lg py-5 px-4  text-center">

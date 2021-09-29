@@ -11,8 +11,6 @@ const GithubUserControl = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
 
-    // search data states
-    const [searchUsers, setSearchUsers] = useState([]);
 
     useEffect(() => {
         const fetchUse = async () => {

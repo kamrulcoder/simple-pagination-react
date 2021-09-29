@@ -6,6 +6,7 @@
 > #### এই প্রজেক্ট এ কি কি ব্যবহার করা  হয়েছে ? 
 1. Axious Api  ব্যবহার করা হয়েছে 
 1. React Route  ব্যবহার করা  হয়েছে 
+1. Loading Spinner   ব্যবহার করা  হয়েছে 
 1. pagination  ব্যবহার করে  প্রজেক্ট করা হয়েছে 
 <br>
 
@@ -205,4 +206,252 @@ const Header = () => {
   );
 };
 export default Header;
+```
+
+
+> ## API  থেকে ডাটা  নিয়ে আসা এবং pagination  তৈরী করা 
+
+### GithubUserControl,Users, SingleUser, Pagination নামে  Component  folder  এবং তারপর ভিতরে CSS এন্ড JS file করতে হবে
+
+> #### এই প্রজেক্ট এ Hook  দিয়ে কাজ করা তাই  হোল এর UseState এবং UseEffect  Hook  কে Import  করে নিতে হবে 
+<br>
+
+```javascript 
+import React, { useEffect, useState } from 'react';
+```
+
+### API   থেকে Data নয় আসতে ও pagination   করতে ৪ টি useState  লাগবে।  সেগুলো হলো - 
+
+```javascript
+    // ইউসার এর   সব ডাটা আনতে 
+    const [posts, setPosts] = useState([]);
+
+  //লোডিং স্পিনার ব্যবহার করতে 
+    const [loading, setLoading] = useState(false);
+
+    // বর্তমান এ পেজ আনতে  
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // একটি পেজ এ  কয়টি  দেখানো হবে  
+    const [postsPerPage] = useState(10);
+```
+
+
+API   ব্যবহার করে ডাটা আনতে  UseEffect  মেথড ব্যবহার করা হয়
+
+```javascript 
+    useEffect(() => {
+
+      // একটি ফাঙ্কশন এর মাঝে  Axious  দিয়ে  ডাটা আনা 
+        const fetchUse = async () => {
+
+          // লোডিং  স্পিনার এর ব্যবহার করার এবং তা লোড এর আগে  পর্যন্ত সত্য থাকবে 
+            setLoading(true);
+
+            // axios দিয়ে ডাটা আনতে 
+            const res = await axios.get('https://api.github.com/users');
+
+            // Posts  এ ডাটা সঞ্চয় করে রাখতে 
+            setPosts(res.data);
+
+            // লোডিং  স্পিনার এর ব্যবহার বন্ধ করে দেওয়া 
+            setLoading(false);
+        }
+
+        //fetchUse  Function কল করা 
+        fetchUse();
+
+    }, []  //  Skipping Effects বন্ধ করা );
+
+
+```
+
+> ### Pagination  এর Current  পেজ এবং   Current  Poss  গুলো দেখানোর জন্য   প্রোগ্র্যাম 
+<br>
+
+```javascript
+    // Get current posts
+
+    // ইনডেক্স অনুযায়ী  কতগুলো পোস্ট দেখানোর বাকি আছে 
+    const indexOfLastPost = currentPage * postsPerPage;
+
+    // কত গুলো  ফার্স্ট এ দেখানো হচ্ছে 
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+
+    // এই মুহূর্তে কত গুলো পোস্ট দেখানো হবে 
+    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+```
+<br>
+যে  পেজ এর Pagination  এ ক্লিক করা হবে সেই ডাটা গুলো দেখানোর জন্য ফাঙ্কশন 
+
+```javascript
+    const paginate = pageNumber => {
+        setCurrentPage(pageNumber)
+    };
+```
+
+###  কম্পোনেন্ট এ ডাটা গুলো  ভ্যালু হিসেবে পাঠিয়ে দেওয়া 
+
+```javascript
+  <Users currentUser={currentPosts} loading={loading} />
+  <Pagination postPerpage={postsPerPage} totalUser={posts.length} paginate={paginate} />
+```
+> ### Pagination  এর Current  পেজ এবং   Current  Poss  গুলো দেখানোর জন্য   প্রোগ্র্যাম
+>>  ### GithubUserControl.js 
+<br>
+
+```javascript
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Users from '../Users/Users';
+import Pagination from '../Pagination/Pagination';
+
+const GithubUserControl = () => {
+
+    // get github user states 
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage] = useState(10);
+
+    // search data states
+    const [searchUsers, setSearchUsers] = useState([]);
+
+    useEffect(() => {
+        const fetchUse = async () => {
+            setLoading(true);
+            const res = await axios.get('https://api.github.com/users');
+            setPosts(res.data);
+            setLoading(false);
+        }
+        fetchUse();
+    }, []);
+
+    // Get current posts
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+
+
+    
+
+    const paginate = pageNumber => {
+        setCurrentPage(pageNumber)
+    };
+
+    return (
+        <div className="cuserArea  py-5">
+            <div className="container">
+                
+                <Users currentUser={currentPosts} loading={loading}></Users>
+                <Pagination postPerpage={postsPerPage} totalUser={posts.length} paginate={paginate} />
+            </div>
+        </div>
+    );
+};
+
+export default GithubUserControl; 
+
+```
+
+> ### Pagination  এর Current  পেজ এবং   Current  Poss  গুলো দেখানোর জন্য   প্রোগ্র্যাম
+>>  ### Pagination.js 
+
+```javascript 
+import React from 'react';
+import classes from './Pagination.module.css'
+
+const Pagination = ({ postPerpage, totalUser, paginate  }) => { // destructor props
+
+    // custom pagination array 
+    const pageNumbers = [];
+
+    কয় টি pagination কত   এর সংখ্যা হবে তা  ক্যাল্কুয়েশন করে  বের করে এরে তে পুশ   করে ডাটা রাখা 
+    for (let i = 1; i <= Math.ceil(totalUser / postPerpage); i++) {
+        pageNumbers.push(i);
+    }
+    return (
+        <div  className={classes.pagintaionArea}> 
+          <ul className={classes.pagination}>
+          
+        { 
+          // ম্যাপ মেথড এর মাধ্যমে paginion  এর নম্বর বা ভ্যালু দেখানো          
+          pageNumbers.map(number => (            
+            <li key={number} className='page-item' onClick={() => paginate(number)}> {number}
+            
+            </li>
+        ))}
+      </ul>
+    </div>
+
+       
+    );
+};
+
+export default Pagination;
+
+```
+
+> ### Pagination  এর Current  পেজ এবং   Current  Poss  গুলো দেখানোর জন্য   প্রোগ্র্যাম
+>>  ### Users.js 
+```javascript 
+
+import React from 'react';
+import Spinner from 'react-bootstrap/Spinner'
+import SingleUser from '../SingleUser/SingleUser'
+import classes from './User.module.css'
+const Users = ({ laoding, currentUser }) => {
+  // destructor props data 
+
+  // loadin state check 
+    if (laoding) {
+        return <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+        </Spinner>
+    }
+  // single user component data 
+    const singleData = currentUser.map((user,ind) => <SingleUser key={ind}  user={user}></SingleUser>)
+
+    return (
+        <div className={classes.userArea}>
+            <div className="row">
+                {singleData}
+            </div>
+
+        </div>
+    );
+};
+
+export default Users;
+```
+
+> ### Pagination  এর Current  পেজ এবং   Current  Poss  গুলো দেখানোর জন্য   প্রোগ্র্যাম
+>>  ### Users.js 
+
+```javascript
+import React from 'react';
+import classes from './SingleUser.module.css'
+
+const SingleUser = ({user}) => {
+
+  // destucture props 
+  const { avatar_url,login,type
+} = user;
+
+return (
+        <div className="col-xl-3 col-sm-6 ">
+        <div className="mb-5 shadow-lg py-5 px-4  text-center">
+        <div className="bg-white rounded   "><img src={avatar_url} alt="" width="100" className="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm"/>
+            <h5 className="mb-2"> {login}</h5><h5 className="small text-uppercase text-muted  ">Type : {type}</h5>            
+        </div>
+        <a href="#"  className="btn btn-danger  mt-3">Profile Link </a>
+        </div>        
+    </div>
+
+    );
+};
+
+export default SingleUser; 
+
 ```

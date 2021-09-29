@@ -11,8 +11,7 @@ const Header = () => {
       <div className="container">
         <div className={classes.menuWrapper}>
           <div className={classes.logo}>
-            <NavLink style={{ textDecoration: "none" }} to="/">
-              {" "}
+            <NavLink style={{ textDecoration: "none" }} to="/">              
               <h4>Github </h4>
             </NavLink>
           </div>
@@ -30,7 +29,7 @@ const Header = () => {
                   to="/"
                 >
                   Home
-                </NavLink>{" "}
+                </NavLink>
               </li>
               <li>
                 <NavLink
@@ -39,8 +38,8 @@ const Header = () => {
                   className={classes.link}
                   to="/about"
                 >
-                  About{" "}
-                </NavLink>{" "}
+                  About
+                </NavLink>
               </li>
               <li>
                 <NavLink
@@ -49,8 +48,8 @@ const Header = () => {
                   className={classes.link}
                   to="/contact"
                 >
-                  Contact{" "}
-                </NavLink>{" "}
+                  Contact
+                </NavLink>
               </li>
             </ul>
           </div>
